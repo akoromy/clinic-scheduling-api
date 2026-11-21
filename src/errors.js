@@ -9,7 +9,7 @@ class ApiError extends Error {
 }
 
   const badRequest = (msg) => new ApiError(400, 'INVALID_INPUT', msg);
-  const unauthenticated = (msg) => new ApiError(401, 'Unauthenticated', msg);
+  const unauthenticated = (msg) => new ApiError(401, 'UNAUTHENTICATED', msg);
   const forbidden = (msg) => new ApiError(403, 'FORBIDDEN', msg);
   const notFound = (msg) => new ApiError(404, 'NOT_FOUND', msg);
   const conflict = (msg) => new ApiError(409, 'BOOKING_CONFLICT', msg);
