@@ -1,7 +1,7 @@
 const express = require('express');
 const { identify } = require('./identify');
 const { patientsRouter } = require('./routes/patients');
-//const { appointmentsRouter } = require('./routes/appointments');
+const { appointmentsRouter } = require('./routes/appointments');
 const { ApiError } = require('./errors');
 
 // Creates Express app with the given database connection and routes
@@ -10,15 +10,14 @@ function createApp(db) {
   app.use(express.json()); 
   app.use(identify(db)); 
   app.use('/patients', patientsRouter(db)); 
-  //app.use('/appointments', appointmentsRouter(db)); 
+  app.use('/appointments', appointmentsRouter(db)); 
 
   app.use((req, res) => {
     res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Route not found' } });
   });
 
    
-  // eslint-disable-next-line no-unused-vars
-  // Error handling middleware: catches errors thrown in routes and sends appropriate response in consistent JSON format
+  // Error handling middleware
   app.use((err, req, res, next) => {
     if (err instanceof ApiError) { 
       return res.status(err.status).json({ error: { code: err.code, message: err.message } });
