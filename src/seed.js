@@ -18,7 +18,7 @@ const PATIENTS = [
 // Deletes everything and inserts fixed seed records in one transaction.
 // Repeatable i.e. running it twice gives same result
 function seed(db) {
-  const reset = db.transaction(() => { // wrap in transaction so that if any insert fails nothing is changed
+  const reset = db.transaction(() => { // Wrap in transaction so that if any insert fails nothing is changed
     db.exec('DELETE FROM appointments; DELETE FROM patients; DELETE FROM users;');
     const insertUser = db.prepare('INSERT INTO users (id, name, role, team_id) VALUES (?, ?, ?, ?)'); // '?' to avoid SQL injection
     for (const u of USERS) insertUser.run(u.id, u.name, u.role, u.teamId); 
