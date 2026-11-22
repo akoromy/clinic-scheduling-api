@@ -34,8 +34,8 @@ function appointmentsRouter(db) {
   });
 
  
-// Clash check and insert in one transaction; 
-    const book = db.transaction((appointment) => { 
+  // Clash check and insert in one transaction
+  const book = db.transaction((appointment) => { 
     if (findClash.get(appointment.doctorId, appointment.endAt, appointment.startAt)) {
       throw conflict('The doctor already has an appointment that overlaps this time');
     }

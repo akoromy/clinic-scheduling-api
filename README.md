@@ -55,7 +55,7 @@ Errors always look like `{ "error": { "code": "...", "message": "..." } }`.
 **Storage.** SQLite keeps setup to `npm install`, with no database server. The
 schema uses foreign keys, a CHECK that start is before end, and an index on
 (doctor_id, start_at, end_at) for the overlap query. For production I'd use
-PostgreSQL or SQL Server, and the SQL would carry over almost unchanged.
+PostgreSQL, the tables and queries would carry over, and the trigger and locking would be replaced by an exclusion constraint.
 
 **Time.** Times must include a timezone and are stored as UTC ISO strings.
 A time without a zone is ambiguous and could double-book a doctor, so it's
