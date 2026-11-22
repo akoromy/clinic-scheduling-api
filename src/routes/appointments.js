@@ -34,8 +34,8 @@ function appointmentsRouter(db) {
   });
 
  
-  // Clash check and insert inside one transaction (so that if any insert fails nothing is changed)
-  const book = db.transaction((appointment) => { 
+// Clash check and insert in one transaction; 
+    const book = db.transaction((appointment) => { 
     if (findClash.get(appointment.doctorId, appointment.endAt, appointment.startAt)) {
       throw conflict('The doctor already has an appointment that overlaps this time');
     }
@@ -71,6 +71,7 @@ function appointmentsRouter(db) {
     }
 
     // Book or report clash (409)
+    // Lock the database before checking, so another process can't book the same slot in between
     const appointment = book.immediate({
       id: crypto.randomUUID(), // Generate new UUID for appointment
       patientId, doctorId, startAt: start, endAt: end, createdById: user.id,

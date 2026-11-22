@@ -123,7 +123,7 @@ describe('POST /appointments', () => {
     expect(res.status).toBe(409);
   });
 
-  test('two simultaneous requests for the same slot: exactly one succeeds', async () => {
+  test('two bookings for the same slot: only the first succeeds', async () => {
     const [first, second] = await Promise.all([
       as('coord-a').post('/appointments', booking()),
       as('admin-1').post('/appointments', booking()),

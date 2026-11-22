@@ -11,7 +11,7 @@ Requires Node 20+ (built with Node 24). No database server needed.
 npm install
 npm run seed     # creates data/clinic.db with the sample users and patients
 npm start        # http://localhost:3000
-npm test         # 27 tests, uses an in-memory database
+npm test         
 ```
 
 ## Seed data (fictional)
@@ -66,7 +66,7 @@ dates into the next month (e.g. 30 February into 2 March).
 
 **Double-booking.** Two appointments overlap when each starts before the
 other ends, but back-to-back appointments are allowed. The check and insert run in
-one `BEGIN IMMEDIATE` transaction, and a database trigger rejects overlaps even
+one `BEGIN IMMEDIATE` transaction, and a database trigger rejects overlapping inserts even
 if some other code skips the API. Importantly, in a single Node process,
 requests already run one at a time, but these protections matter when several
 processes share the database. In PostgreSQL I'd use an exclusion constraint.
@@ -81,6 +81,16 @@ an audit log of who viewed or changed what;
 cancellation and rescheduling with history instead of deletion; pagination
 and date filters; rate limiting; showing times in the clinic's timezone; and
 mapping appointments to FHIR Appointment resources for interoperability.
+
+## Known limitations
+
+- No cancelling or rescheduling appointments.
+- Bookings in the past are allowed.
+- Checking existence (404) before permission (403) reveals which patient IDs exist.
+- The overlap trigger covers inserts only. The API has no update endpoint, but direct database edits are not checked.
+- The locking only matters when several processes share the database; one Node process already handles requests one at a time.
+- Running `npm run seed` again deletes all appointments.
+- Identity comes from the `X-User-Id` header, a stand-in for real authentication.
 
 ## Use of AI
 
